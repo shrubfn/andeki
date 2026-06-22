@@ -1,0 +1,5 @@
+#virt
+.venv/
+
+#flask instance folder
+instance/
