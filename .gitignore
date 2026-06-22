@@ -3,3 +3,6 @@
 
 #flask instance folder
 instance/
+
+__pycache__/
+*.pyc
