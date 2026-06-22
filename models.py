@@ -24,6 +24,7 @@ class Anime(db.Model):
     current_episode = db.Column(db.Integer, default=0)
     api_score = db.Column(db.Float)
     genre = db.Column(db.String(100))
+    synopsis = db.Column(db.Text)
 
     status = db.Column(db.String(50), default="Plan to Watch")
     rating = db.Column(db.Integer)
