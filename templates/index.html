@@ -2,9 +2,17 @@
 
 {% block content %}
     <section class="welcome">
+        {% if session.get("user_id") %}
+            <h1>Welcome back, {{ session.get("username") }}</h1>
+            <p>Go to your dashboard to view your anime library or search for new anime to add.</p>
+
+            <a href="/dashboard" class="button">Go to Dashboard</a>
+            <a href="/search" class="button">Search Anime</a>
+        {% else %}
     <h1>Welcome to Andeki</h1>
     <p>Track your anime, save your progress, and build your own personal watch library.</p>
 
     <a href="/register" class="button">Get Started</a>
+    {% endif %}
 {% endblock %}
 

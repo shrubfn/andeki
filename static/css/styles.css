@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+
 /* General page setup */
 * {
     margin: 0;
@@ -6,7 +9,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: #111827;
     color: #f9fafb;
     line-height: 1.6;
@@ -39,6 +42,12 @@ body {
     color: #ffffff;
 }
 
+.nav-user {
+    color: #a5b4fc;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
 /* Main content area */
 .container {
     width: 90%;
@@ -48,11 +57,18 @@ body {
 
 /* Flash messages */
 .flash-box {
-    background-color: #065f46;
     color: #ffffff;
     padding: 12px 16px;
     border-radius: 8px;
     margin-bottom: 20px;
+}
+
+.flash-success {
+    background-color: #065f46;
+}
+
+.flash-error {
+    background-color: #991b1b;
 }
 
 /* Homepage */
@@ -134,4 +150,22 @@ body {
     padding: 25px;
     border-radius: 12px;
     margin-bottom: 20px;
+}
+
+/* Logout button */
+.logout-form {
+    display: inline;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #d1d5db;
+    margin-left: 20px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    color: #ffffff;
 }

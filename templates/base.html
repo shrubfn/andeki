@@ -9,15 +9,22 @@
 
     <nav class="navbar">
         <div class="nav-logo">
-            <a href="/">Andeki</a>
+            <a href="/">andeki</a>
         </div>
 
         <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/search">Search</a>
-            <a href="/register">Register</a>
-            <a href="/login">Login</a>
+             {% if session.get("user_id") %}
+                <span class="nav-user">Logged in as {{ session.get("username") }}</span>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/search">Search</a>
+
+                <form action="{{ url_for('logout') }}" method="POST" class="logout-form">
+                    <button type="submit" class="logout-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="/register">Register</a>
+                <a href="/login">Login</a>
+            {% endif %}
         </div>
     </nav>
 
@@ -25,10 +32,10 @@
 
     <main class="container">
 
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
-                <div class="flash-box">
-                    {% for message in messages %}
+                {% for category, message in messages %}
+                    <div class="flash-box flash-{{ category }}">
                         <p>{{ message }}</p>
                     {% endfor %}
                 </div>
