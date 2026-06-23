@@ -40,6 +40,58 @@
             <p><strong>Genre:</strong> {{ anime.genre }}</p>
             <p><strong>API Score:</strong> {{ anime.api_score }}</p>
 
+            {% if anime.rating %}
+                <p><strong>Your Rating:</strong> {{ anime.rating }}/10</p>
+            {% else %}
+                <p><strong>Your Rating:</strong> Not rated yet</p>
+            {% endif %}
+
+            <div class="anime-edit-section">
+                <h3>Update Anime</h3>
+
+                <form action="{{ url_for('update_anime', anime_id=anime.id) }}" method="POST">
+
+                    <label for="status">Status</label>
+                        <select name="status" id="status">
+                        <option value="Plan to Watch" {% if anime.status == "Plan to Watch" %}selected{% endif %}>
+                                Plan to Watch
+                            </option>
+
+                            <option value="Watching" {% if anime.status == "Watching" %}selected{% endif %}>
+                                Watching
+                            </option>
+
+                            <option value="Completed" {% if anime.status == "Completed" %}selected{% endif %}>
+                                Completed
+                            </option>
+
+                            <option value="On Hold" {% if anime.status == "On Hold" %}selected{% endif %}>
+                                On Hold
+                            </option>
+
+                            <option value="Dropped" {% if anime.status == "Dropped" %}selected{% endif %}>
+                                Dropped
+                            </option>
+                        </select>
+
+                        <label for="rating">Your Rating</label>
+                        <select name="rating" id="rating">
+                            <option value="">No rating</option>
+
+                            {% for number in range(1, 11) %}
+                                <option value="{{ number }}" {% if anime.rating == number %}selected{% endif %}>
+                                    {{ number }}/10
+                                </option>
+                            {% endfor %}
+                        </select>
+
+        <button type="submit" class="primary-btn">
+            Save Changes
+        </button>
+
+    </form>
+</div>
+
             {% if anime.synopsis %}
                 <div class="anime-synopsis">
                     <h3>Synopsis</h3>

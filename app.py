@@ -275,6 +275,68 @@ def delete_anime(anime_id):
 
 
 
+#route for rating and status
+@app.route("/anime/<int:anime_id>/update", methods=["POST"])
+def update_anime(anime_id):
+    if "user_id" not in session:
+        flash("Please log in to update your anime.", "error")
+        return redirect(url_for("login"))
+
+    anime = Anime.query.filter_by(
+        id=anime_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if anime is None:
+        flash("Anime not found.", "error")
+        return redirect(url_for("dashboard"))
+
+
+    #get values and data from the html req form
+    status = request.form.get("status")
+    rating = request.form.get("rating")
+
+    allowed_statuses = [
+        "Plan to Watch",
+        "Watching",
+        "Completed",
+        "On Hold",
+        "Dropped"
+    ]
+
+    if status not in allowed_statuses:
+        flash("Invalid status selected.", "error")
+        return redirect(url_for("anime_detail", anime_id=anime.id))
+
+    anime.status = status
+
+
+    #error handling, make sure rating and status is correct before changing db and committing
+    if rating == "":
+        anime.rating = None
+    else:
+        #try for excpetion handling, prevent crash
+        try:
+            rating = int(rating)
+
+            if rating < 1 or rating > 10:
+                flash("Rating must be between 1 and 10.", "error")
+                return redirect(url_for("anime_detail", anime_id=anime.id))
+
+            anime.rating = rating
+
+        #use except to prevent crashing
+        except ValueError:
+            flash("Rating must be a number.", "error")
+            return redirect(url_for("anime_detail", anime_id=anime.id))
+
+    db.session.commit()
+
+    flash("Anime details updated.", "success")
+    return redirect(url_for("anime_detail", anime_id=anime.id))
+
+
+
 #run website only if app is run
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
