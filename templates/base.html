@@ -1,33 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <meta charset="UTF-8">
     <title>Andeki</title>
 </head>
 <body>
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/search">Search Anime</a>
-        <a href="/register">Register</a>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <a href="/">Andeki</a>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/search">Search</a>
+            <a href="/register">Register</a>
+            <a href="/login">Login</a>
+        </div>
     </nav>
 
     <hr>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+    <main class="container">
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-box">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <main>
         {% block content %}
         {% endblock %}
+
     </main>
+
 
 </body>
 </html>
