@@ -32,10 +32,11 @@ def dashboard():
     if "user_id" not in session:
         flash("Please log in to view your dashboard.", "error")
         return redirect(url_for("login"))
-
-    user = db.session.get(User, session["user_id"])
     
-    return render_template("dashboard.html", user=user)
+    #find all anime with user id of session id
+    anime_list = Anime.query.filter_by(user_id=session["user_id"]).all()
+
+    return render_template("dashboard.html", anime_list=anime_list)
 
 
 
@@ -114,16 +115,59 @@ def login():
         return render_template("login.html")
 
 
+#backend route for library adding
+@app.route("/add-to-library", methods=["POST"])
+def add_to_library():
+    if "user_id" not in session:
+        flash("Please log in to add anime to your library.", "error")
+        return redirect(url_for("login"))
+
+    mal_id = request.form.get("mal_id")
+    title = request.form.get("title")
+    image_url = request.form.get("image_url")
+    total_episodes = request.form.get("total_episodes")
+    genre = request.form.get("genre")
+    synopsis = request.form.get("synopsis")
+    api_score = request.form.get("api_score")
+
+    existing_anime = Anime.query.filter_by(
+        user_id=session["user_id"],
+        mal_id=mal_id
+    ).first()
+
+    if existing_anime:
+        flash("This anime is already in your library.", "error")
+        return redirect(url_for("dashboard"))
+
+    new_anime = Anime(
+        user_id=session["user_id"],
+        mal_id=mal_id,
+        title=title,
+        image_url=image_url,
+        total_episodes=total_episodes,
+        current_episode=0,
+        genre=genre,
+        synopsis=synopsis,
+        api_score=api_score,
+        status="Plan to Watch",
+        rating=None,
+        notes=""
+    )
+
+    db.session.add(new_anime)
+    db.session.commit()
+
+    flash(f"{title} added to your library.", "success")
+    return redirect(url_for("dashboard"))
+
+
+
 #logout route
 @app.route("/logout", methods=["POST"])
 def logout():
     session.clear()
     flash("You have been logged out.", "success")
     return redirect(url_for("index"))
-
-
-
-
 
 #run website only if app is run
 if __name__ == "__main__":

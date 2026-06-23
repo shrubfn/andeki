@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Saved Anime</h1>
-    <p>Your saved anime will appear here.</p>
+    <h1>Your Anime Library</h1>
+
+{% if anime_list %}
+    <div class="anime-grid">
+        {% for anime in anime_list %}
+            <div class="anime-card">
+                <img src="{{ anime.image_url }}" alt="{{ anime.title }}">
+
+                <div class="anime-card-content">
+                    <h2>{{ anime.title }}</h2>
+
+                    <p><strong>Episodes:</strong> {{ anime.current_episode }} / {{ anime.total_episodes or "Unknown" }}</p>
+
+                    <p><strong>Status:</strong> {{ anime.status }}</p>
+
+                    <p><strong>Genres:</strong> {{ anime.genre or "Unknown" }}</p>
+
+                    <p><strong>MAL Score:</strong> {{ anime.api_score or "N/A" }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You have not added any anime to your library yet.</p>
+    <a href="{{ url_for('search') }}" class="primary-btn">Search Anime</a>
+{% endif %}
 {% endblock %}

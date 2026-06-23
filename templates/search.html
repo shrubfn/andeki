@@ -4,7 +4,7 @@
 {% block content %}
 <section class="search-section">
     <h1>Search Anime</h1>
-    <p>Search for anime using the Jikan API.</p>
+    <p>Search for anime listed on MyAnimeList.</p>
 
     <form method="GET" action="{{ url_for('search') }}" class="search-form">
         <input 
@@ -49,9 +49,18 @@
                         <p class="synopsis">No synopsis available.</p>
                     {% endif %}
 
-                    <button class="btn secondary-btn">
-                        Add to Library
-                    </button>
+                    <form method="POST" action="{{ url_for('add_to_library') }}">
+                        
+                        <input type="hidden" name="mal_id" value="{{ anime.mal_id }}">
+                        <input type="hidden" name="title" value="{{ anime.title }}">
+                        <input type="hidden" name="image_url" value="{{ anime.image_url }}">
+                        <input type="hidden" name="total_episodes" value="{{ anime.episodes }}">
+                        <input type="hidden" name="genre" value="{{ anime.genre }}">
+                        <input type="hidden" name="synopsis" value="{{ anime.synopsis }}">
+                        <input type="hidden" name="api_score" value="{{ anime.score }}">
+
+                        <button type="submit" class="secondary-btn">Add to Library</button>
+                    </form>
                 </div>
             </div>
         {% endfor %}
