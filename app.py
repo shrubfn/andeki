@@ -18,7 +18,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # ceates the database controller object
 db.init_app(app)
-from models import User
+from models import User, Anime
 
 #create route and pages
 @app.route("/")

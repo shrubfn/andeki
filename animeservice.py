@@ -1,20 +1,39 @@
 import requests
-
+import re
 
 JIKAN_BASE_URL = "https://api.jikan.moe/v4"
 
 
-def search_anime(query, limit=10):
+
+def validate_search_query(query):
     query = query.strip()
 
     if not query:
-        return False, "Please enter an anime title.", []
+        return False, "Please enter an anime title.", ""
 
     if len(query) < 3:
-        return False, "Search must be at least 3 characters long.", []
+        return False, "Search must be at least 3 characters long.", ""
+
+    if len(query) > 80:
+        return False, "Search must be 80 characters or less.", ""
+
+    if not re.match(r"^[a-zA-Z0-9\s:.'!?&\-/;]+$", query):
+        return False, "Search contains invalid characters.", ""
+
+    return True, "", query
+
+
+def search_anime(query, limit=10):
+
+    is_valid, message, query = validate_search_query(query)
+
+    if not is_valid:
+        return False, message, []
+    
 
     url = f"{JIKAN_BASE_URL}/anime"
 
+    #params for jikan to take 
     params = {
         "q": query,
         "sfw": "true",
