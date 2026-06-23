@@ -137,7 +137,7 @@ def add_to_library():
 
     if existing_anime:
         flash("This anime is already in your library.", "error")
-        return redirect(url_for("dashboard"))
+        return redirect(request.referrer)
 
     new_anime = Anime(
         user_id=session["user_id"],
