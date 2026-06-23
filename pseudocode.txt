@@ -1,2 +1,58 @@
 Subroutine 1 - Jikan API requests
 
+SearchAnime(query)
+
+IF query is empty THEN
+    RETURN error message and empty results
+END IF
+
+IF length of query is less than 3 characters THEN
+    RETURN error message and empty results
+END IF
+
+SET API URL to Jikan anime search endpoint
+
+CREATE request parameters:
+    query = user search term
+    safe for work = true
+    result limit = 10
+
+TRY
+
+    SEND GET request to Jikan API
+
+    IF response status code is 429 THEN
+        RETURN rate limit error message and empty results
+    END IF
+
+    CONVERT JSON response into Python data structure
+
+CATCH connection or request errors
+
+    RETURN API connection error message and empty results
+
+END TRY
+
+CREATE empty results list
+
+FOR EACH anime returned by the API
+
+    EXTRACT:
+        MyAnimeList ID
+        title
+        image URL
+        episode count
+        genres
+        synopsis
+        score
+        status
+        type
+        year
+
+    STORE extracted information in anime dictionary
+
+    ADD anime dictionary to results list
+
+END FOR
+
+RETURN success status, message, and results list
