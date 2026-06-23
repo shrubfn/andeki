@@ -10,9 +10,19 @@
         <a href="/">Home</a>
         <a href="/dashboard">Dashboard</a>
         <a href="/search">Search Anime</a>
+        <a href="/register">Register</a>
     </nav>
 
     <hr>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 
     <main>
         {% block content %}

@@ -1,4 +1,4 @@
-from app import db
+from extensions import db
 
 #create user datatable, every field is necessary
 class User(db.Model):
