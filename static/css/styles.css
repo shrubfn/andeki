@@ -308,6 +308,8 @@ body {
 }
 
 
+/* Library dashboard page*/
+
 .anime-card-link {
     text-decoration: none;
     color: inherit;
@@ -434,4 +436,40 @@ body {
 .delete-anime-form .danger-btn:hover {
     background-color: #991b1b;
     transform: translateY(-2px);
+}
+
+.anime-edit-section {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.anime-edit-section h3 {
+    margin-bottom: 1rem;
+}
+
+.anime-edit-section form {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.anime-edit-section label {
+    font-weight: 600;
+}
+
+.anime-edit-section select {
+    font-family: 'Inter', sans-serif;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+}
+
+.anime-edit-section button {
+    font-family: 'Inter', sans-serif;
+    margin-top: 0.5rem;
+    width: fit-content;
 }

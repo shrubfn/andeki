@@ -58,13 +58,15 @@ def search_anime(query, limit=10):
     #loop thru 
     for anime in data.get("data", []):
 
-    #loop thr
+    #loop thru to get genres
         genres = anime.get("genres", [])
         genre_names = []
 
         for genre in genres:
             genre_names.append(genre.get("name"))
 
+
+        #create genre text to be displayed/saved
         genre_text = ", ".join(genre_names) if genre_names else "Unknown"
 
         image_url = (
@@ -73,6 +75,7 @@ def search_anime(query, limit=10):
             .get("large_image_url")
         )
 
+        #extract essential data from anime objs in data list
         anime_data = {
             "mal_id": anime.get("mal_id"),
             "title": anime.get("title"),

@@ -56,3 +56,231 @@ FOR EACH anime returned by the API
 END FOR
 
 RETURN success status, message, and results list
+
+
+
+
+
+
+
+Mainline Program Pseudocode
+START PROGRAM
+
+INITIALISE Flask application
+
+CONNECT application to SQLite database using SQLAlchemy
+
+LOAD database models, including User and Anime objects
+
+SET secret key for sessions and flash messages
+
+DISPLAY navigation bar on all pages
+
+IF user is logged in THEN
+DISPLAY username, dashboard link, search link, and logout button
+ELSE
+DISPLAY register and login links
+ENDIF
+
+WAIT for user action
+
+IF user opens home page THEN
+DISPLAY homepage
+ENDIF
+
+IF user chooses to register THEN
+DISPLAY registration form
+
+IF form is submitted THEN
+    RECEIVE username, email, and password
+
+    CHECK if username or email already exists
+
+    IF user already exists THEN
+        DISPLAY error message
+        REDIRECT back to register page
+    ELSE
+        HASH password
+        CREATE new User object
+        SAVE new user to database
+        DISPLAY success message
+        REDIRECT to login page
+    ENDIF
+ENDIF
+
+ENDIF
+
+IF user chooses to login THEN
+DISPLAY login form
+
+IF form is submitted THEN
+    RECEIVE username/email and password
+
+    SEARCH database for matching user
+
+    IF user exists AND password is correct THEN
+        STORE user ID and username in session
+        DISPLAY success message
+        REDIRECT to dashboard
+    ELSE
+        DISPLAY error message
+        REDIRECT back to login page
+    ENDIF
+ENDIF
+
+ENDIF
+
+IF user chooses to logout THEN
+CLEAR session data
+DISPLAY logout message
+REDIRECT to homepage
+ENDIF
+
+IF logged-in user opens search page THEN
+DISPLAY search form
+
+IF search query is submitted THEN
+    VALIDATE search query
+
+    IF search query is invalid THEN
+        DISPLAY error message
+    ELSE
+        SEND request to Jikan API
+        RECEIVE anime JSON data
+        CLEAN and extract required anime data
+        DISPLAY anime results as cards
+    ENDIF
+ENDIF
+
+ENDIF
+
+IF logged-in user clicks Add to Library THEN
+RECEIVE selected anime data from hidden form inputs
+
+CHECK if anime already exists in the current user’s library
+
+IF duplicate anime is found THEN
+    DISPLAY duplicate error message
+    RETURN user to previous search page
+ELSE
+    CREATE new Anime object
+    LINK Anime object to logged-in user ID
+    SET default current episode to 0
+    SET default status to Plan to Watch
+    SET default rating to empty
+    SAVE Anime object to database
+    DISPLAY success message
+    REDIRECT to dashboard
+ENDIF
+
+ENDIF
+
+IF logged-in user opens dashboard THEN
+RETRIEVE all Anime objects belonging to current user
+DISPLAY saved anime as dashboard cards
+ENDIF
+
+IF logged-in user clicks an anime card THEN
+GET anime ID from URL
+
+SEARCH database for anime using anime ID and logged-in user ID
+
+IF anime does not exist OR does not belong to current user THEN
+    DISPLAY error message
+    REDIRECT to dashboard
+ELSE
+    DISPLAY anime detail page
+    SHOW anime image, title, progress, status, genre, API score, rating, and synopsis
+ENDIF
+
+ENDIF
+
+IF logged-in user increases episode progress THEN
+SEARCH for anime using anime ID and logged-in user ID
+
+IF anime exists THEN
+    IF total episodes is known THEN
+        IF current episode is less than total episodes THEN
+            INCREASE current episode by 1
+            SAVE change to database
+        ELSE
+            DISPLAY error message saying final episode has been reached
+        ENDIF
+    ELSE
+        INCREASE current episode by 1
+        SAVE change to database
+    ENDIF
+ENDIF
+
+REDIRECT back to anime detail page
+
+ENDIF
+
+IF logged-in user decreases episode progress THEN
+SEARCH for anime using anime ID and logged-in user ID
+
+IF anime exists THEN
+    IF current episode is greater than 0 THEN
+        DECREASE current episode by 1
+        SAVE change to database
+    ELSE
+        DISPLAY error message saying progress cannot go below 0
+    ENDIF
+ENDIF
+
+REDIRECT back to anime detail page
+
+ENDIF
+
+IF logged-in user updates status or rating THEN
+RECEIVE selected status and rating from update form
+
+SEARCH for anime using anime ID and logged-in user ID
+
+IF anime exists THEN
+    VALIDATE selected status
+
+    IF status is valid THEN
+        UPDATE anime status
+    ELSE
+        DISPLAY invalid status error message
+    ENDIF
+
+    IF rating is empty THEN
+        SET rating to None
+    ELSE
+        CONVERT rating to integer
+
+        IF rating is between 1 and 10 THEN
+            UPDATE anime rating
+        ELSE
+            DISPLAY invalid rating error message
+        ENDIF
+    ENDIF
+
+    SAVE changes to database
+    DISPLAY success message
+ENDIF
+
+REDIRECT back to anime detail page
+
+ENDIF
+
+IF logged-in user deletes an anime THEN
+ASK user to confirm deletion
+
+IF deletion is confirmed THEN
+    SEARCH for anime using anime ID and logged-in user ID
+
+    IF anime exists THEN
+        DELETE Anime object from database
+        SAVE change to database
+        DISPLAY success message
+        REDIRECT to dashboard
+    ELSE
+        DISPLAY error message
+        REDIRECT to dashboard
+    ENDIF
+ENDIF
+
+ENDIF
