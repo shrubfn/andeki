@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from authservice import create_user, authenticate_user
+from animeservice import search_anime
 
 
 app = Flask(__name__)
@@ -40,7 +41,22 @@ def dashboard():
 
 @app.route("/search")
 def search():
-    return render_template("search.html")
+    if "user_id" not in session:
+            flash("Please log in to search anime.", "error")
+            return redirect(url_for("login"))
+
+    query = request.args.get("q", "")
+    results = []
+
+    if query:
+        success, message, results = search_anime(query)
+
+        if not success:
+            flash(message, "error")
+        elif len(results) == 0:
+            flash("No anime results found.", "error")
+
+    return render_template("search.html", query=query, results=results)
 
 
 
