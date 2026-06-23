@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from extensions import db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from authservice import create_user, authenticate_user
 
 
 app = Flask(__name__)
@@ -27,7 +28,13 @@ def index():
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+    if "user_id" not in session:
+        flash("Please log in to view your dashboard.", "error")
+        return redirect(url_for("login"))
+
+    user = db.session.get(User, session["user_id"])
+    
+    return render_template("dashboard.html", user=user)
 
 
 
@@ -39,44 +46,68 @@ def search():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "POST":
-        username = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
+    if "user_id" in session:
+        flash("You are already logged in.", "error")
+        return redirect(url_for("dashboard"))
+    else:
+        if request.method == "POST":
+            username = request.form.get("username")
+            email = request.form.get("email")
+            password = request.form.get("password")
 
-        #check 4 existing users or email
-        existing_user = User.query.filter(
-            (User.username == username) | (User.email == email)
-        ).first()
+            #use register function
+            success, message = create_user(username, email, password)
 
-        if existing_user:
-            flash("Username or email already exists.")
-            return redirect(url_for("register"))
-        
-        #hash
-        hashed_password = generate_password_hash(password)
+            #flash class for css
+            flash(message, "success" if success else "error")
 
-        # create new user obj
-        new_user = User(
-            username=username,
-            email=email,
-            password_hash=hashed_password
-        )
+            if success:
+                return redirect(url_for("login"))
 
-        #add new user to database
-        db.session.add(new_user)
-        db.session.commit()
+            return render_template(
+                "register.html",
+                username=username,
+                email=email
+            )
 
-        flash("Account created successfully. You can now log in.")
-        return redirect(url_for("index"))
-
-    return render_template("register.html")
+        return render_template("register.html")
 
 
-
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    if "user_id" in session:
+        flash("You are already logged in.", "error")
+        return redirect(url_for("dashboard"))
+    else:
+        if request.method == "POST":
+            email = request.form.get("email")
+            password = request.form.get("password")
+
+            #use auth function 
+            success, message, user = authenticate_user(email, password)
+
+            flash(message, "success" if success else "error")
+
+            if success:
+                session["user_id"] = user.id
+                session["username"] = user.username
+                return redirect(url_for("dashboard"))
+
+            return render_template("login.html", email=email)
+        
+        return render_template("login.html")
+
+
+#logout route
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("index"))
+
+
+
+
 
 #run website only if app is run
 if __name__ == "__main__":
