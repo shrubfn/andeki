@@ -6,21 +6,23 @@
 {% if anime_list %}
     <div class="anime-grid">
         {% for anime in anime_list %}
-            <div class="anime-card">
-                <img src="{{ anime.image_url }}" alt="{{ anime.title }}">
+            <a href="{{ url_for('anime_detail', anime_id=anime.id) }}" class="anime-card-link">
+                <div class="anime-card">
+                    <img src="{{ anime.image_url }}" alt="{{ anime.title }}">
 
-                <div class="anime-card-content">
-                    <h2>{{ anime.title }}</h2>
+                    <div class="anime-card-content">
+                        <h2>{{ anime.title }}</h2>
 
-                    <p><strong>Episodes:</strong> {{ anime.current_episode }} / {{ anime.total_episodes or "Unknown" }}</p>
+                        <p><strong>Episodes:</strong> {{ anime.current_episode }} / {{ anime.total_episodes or "Unknown" }} Watched</p>
 
-                    <p><strong>Status:</strong> {{ anime.status }}</p>
+                        <p><strong>Status:</strong> {{ anime.status }}</p>
 
-                    <p><strong>Genres:</strong> {{ anime.genre or "Unknown" }}</p>
+                        <p><strong>Genres:</strong> {{ anime.genre or "Unknown" }}</p>
 
-                    <p><strong>MAL Score:</strong> {{ anime.api_score or "N/A" }}</p>
+                        <p><strong>MAL Score:</strong> {{ anime.api_score or "N/A" }}</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 {% else %}
