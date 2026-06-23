@@ -30,15 +30,15 @@
 
     <hr>
 
-    <main class="container">
+    <main class="{% block main_class %}container{% endblock %}">
 
         {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="flash-box flash-{{ category }}">
                         <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             {% endif %}
         {% endwith %}
 

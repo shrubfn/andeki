@@ -169,6 +169,112 @@ def logout():
     flash("You have been logged out.", "success")
     return redirect(url_for("index"))
 
+
+#anime page route
+@app.route("/anime/<int:anime_id>")
+def anime_detail(anime_id):
+    if "user_id" not in session:
+        flash("Please log in to view your library.")
+        return redirect(url_for("login"))
+
+    anime = Anime.query.filter_by(
+        id=anime_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if anime is None:
+        flash("Anime not found.")
+        return redirect(url_for("dashboard"))
+
+    return render_template("anime_detail.html", anime=anime)
+
+
+
+#adding and decreasing episode
+@app.route("/anime/<int:anime_id>/increase", methods=["POST"])
+def increase_episode(anime_id):
+    if "user_id" not in session:
+        flash("Please log in to update your anime.", "error")
+        return redirect(url_for("login"))
+
+    anime = Anime.query.filter_by(
+        id=anime_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if anime is None:
+        flash("Anime not found.", "error")
+        return redirect(url_for("dashboard"))
+
+    # if total episodes is known, do not go past the maximum
+    if anime.total_episodes is not None:
+        if anime.current_episode < anime.total_episodes:
+            anime.current_episode += 1
+        else:
+            flash("You have already reached the final episode.", "error")
+            return redirect(url_for("anime_detail", anime_id=anime.id))
+
+    # Iif total episodes is unknown, allow it to keep increasing
+    else:
+        anime.current_episode += 1
+
+    db.session.commit()
+
+    flash("Episode progress updated.", "success")
+    return redirect(url_for("anime_detail", anime_id=anime.id))
+
+
+@app.route("/anime/<int:anime_id>/decrease", methods=["POST"])
+def decrease_episode(anime_id):
+    if "user_id" not in session:
+        flash("Please log in to update your anime.", "error")
+        return redirect(url_for("login"))
+
+    anime = Anime.query.filter_by(
+        id=anime_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if anime is None:
+        flash("Anime not found.", "error")
+        return redirect(url_for("dashboard"))
+
+    if anime.current_episode > 0:
+        anime.current_episode -= 1
+    else:
+        flash("Episode progress cannot go below 0.", "error")
+        return redirect(url_for("anime_detail", anime_id=anime.id))
+
+    db.session.commit()
+
+    flash("Episode progress updated.", "success")
+    return redirect(url_for("anime_detail", anime_id=anime.id))
+
+
+#deleting anime from library
+@app.route("/anime/<int:anime_id>/delete", methods=["POST"])
+def delete_anime(anime_id):
+    if "user_id" not in session:
+        flash("Please log in to delete anime.", "error")
+        return redirect(url_for("login"))
+
+    anime = Anime.query.filter_by(
+        id=anime_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if anime is None:
+        flash("Anime not found.", "error")
+        return redirect(url_for("dashboard"))
+
+    db.session.delete(anime)
+    db.session.commit()
+
+    flash("Anime removed from your library.", "success")
+    return redirect(url_for("dashboard"))
+
+
+
 #run website only if app is run
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

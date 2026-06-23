@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{{ anime.title }}{% endblock %}
+
+{% block main_class %}wide-container{% endblock %}
+
+{% block content %}
+
+<section class="anime-detail-section">
+
+    <a href="{{ url_for('dashboard') }}" class="secondary-btn">
+        Back to Dashboard
+    </a>
+
+    <div class="anime-detail-card">
+        <form 
+                    action="{{ url_for('delete_anime', anime_id=anime.id) }}" 
+                    method="POST"
+                    class="delete-anime-form"
+                    onsubmit="return confirm('Are you sure you want to delete this anime from your library?');">
+                    <button type="submit" class="delete-anime-btn"> 
+                        Delete Anime
+                    </button>
+                </form>
+        <img 
+            src="{{ anime.image_url }}" 
+            alt="{{ anime.title }}" 
+            class="anime-detail-image"
+        >
+
+        <div class="anime-detail-content">
+            
+            <h1>{{ anime.title }}</h1>
+
+            
+
+            <p><strong>Episodes:</strong> {{ anime.current_episode }} / {{ anime.total_episodes or "Unknown" }} Watched</p>
+
+            <p><strong>Status:</strong> {{ anime.status }}</p>
+            <p><strong>Genre:</strong> {{ anime.genre }}</p>
+            <p><strong>API Score:</strong> {{ anime.api_score }}</p>
+
+            {% if anime.synopsis %}
+                <div class="anime-synopsis">
+                    <h3>Synopsis</h3>
+                    <p>{{ anime.synopsis }}</p>
+                </div>
+            {% endif %}
+
+            <div class="anime-actions">
+                <form action="{{ url_for('increase_episode', anime_id=anime.id) }}" method="POST">
+                    <button type="submit" class="primary-btn">
+                        +1 Episode
+                    </button>
+                </form>
+
+                <form action="{{ url_for('decrease_episode', anime_id=anime.id) }}" method="POST">
+                    <button type="submit" class="secondary-btn">
+                        -1 Episode
+                    </button>
+                </form>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

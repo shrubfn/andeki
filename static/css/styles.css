@@ -15,6 +15,8 @@ body {
     line-height: 1.6;
 }
 
+
+
 /* Navigation bar */
 .navbar {
     background-color: #1f2937;
@@ -48,11 +50,21 @@ body {
     font-size: 14px;
 }
 
+
+
+
 /* Main content area */
 .container {
     width: 90%;
     max-width: 1400px;
     margin: 40px auto;
+}
+
+
+.wide-container {
+    max-width: 2000px;
+    margin: 0 auto;
+    padding: 2rem;
 }
 
 /* Flash messages */
@@ -70,6 +82,9 @@ body {
 .flash-error {
     background-color: #991b1b;
 }
+
+
+
 
 /* Homepage */
 .welcome {
@@ -105,8 +120,6 @@ body {
 .button:hover {
     background-color: #4f46e5;
 }
-
-
 
 
 
@@ -148,6 +161,9 @@ body {
     border-color: #6366f1;
 }
 
+
+
+
 /* Basic page cards */
 .card {
     background-color: #1f2937;
@@ -162,6 +178,7 @@ body {
 }
 
 .logout-button {
+    font-family: 'Inter', sans-serif;
     background: none;
     border: none;
     color: #d1d5db;
@@ -173,10 +190,6 @@ body {
 .logout-button:hover {
     color: #ffffff;
 }
-
-
-
-
 
 
 
@@ -294,3 +307,131 @@ body {
     line-height: 1.4;
 }
 
+
+.anime-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.anime-card-link:hover .anime-card {
+    transform: translateY(-4px);
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+
+/* anime detail page */
+
+
+.anime-detail-section {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.anime-detail-card {
+    position: relative;
+    width: 100%;
+    max-width: 1700px;
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    background: rgb(68, 62, 97);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.anime-detail-image {
+    width: 250px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.anime-detail-content {
+    flex: 1;
+}
+
+.anime-detail-content h1 {
+    margin-bottom: 1rem;
+}
+
+.anime-detail-content p {
+    margin-bottom: 0.75rem;
+}
+
+.anime-synopsis {
+    margin-top: 1.5rem;
+}
+
+.anime-synopsis p {
+    line-height: 1.6;
+}
+
+.anime-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.anime-actions form {
+    margin: 0;
+}
+
+.anime-actions button {
+    font-family: 'Inter', sans-serif;
+    padding: 0.75rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.anime-actions .primary-btn {
+    background-color: #4f46e5;
+    color: white;
+}
+
+.anime-actions .primary-btn:hover {
+    background-color: #3730a3;
+    transform: translateY(-2px);
+}
+
+.anime-actions .secondary-btn {
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.anime-actions .secondary-btn:hover {
+    background-color: #d1d5db;
+    transform: translateY(-2px);
+}
+
+.delete-anime-form {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    margin: 0;
+}
+
+.delete-anime-btn {
+    font-family: 'Inter', sans-serif;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.delete-anime-form .danger-btn:hover {
+    background-color: #991b1b;
+    transform: translateY(-2px);
+}
