@@ -1,6 +1,58 @@
 {% extends "base.html" %}
+{% block title %}Search Anime - Andeki{% endblock %}
 
 {% block content %}
+<section class="search-section">
     <h1>Search Anime</h1>
-    <p>Anime search will go here.</p>
+    <p>Search for anime using the Jikan API.</p>
+
+    <form method="GET" action="{{ url_for('search') }}" class="search-form">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Search for an anime..."
+            value="{{ query or '' }}"
+        >
+
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+</section>
+
+{% if query %}
+    <h2>Results for "{{ query }}"</h2>
+{% endif %}
+
+{% if results %}
+    <section class="anime-grid">
+        {% for anime in results %}
+            <div class="anime-card">
+                {% if anime.image_url %}
+                    <img src="{{ anime.image_url }}" alt="{{ anime.title }}">
+                {% endif %}
+
+                <div class="anime-card-content">
+                    <h3>{{ anime.title }}</h3>
+
+                    <p><strong>Type:</strong> {{ anime.type or "Unknown" }}</p>
+                    <p><strong>Episodes:</strong> {{ anime.episodes or "Unknown" }}</p>
+                    <p><strong>Score:</strong> {{ anime.score or "N/A" }}</p>
+                    <p><strong>Status:</strong> {{ anime.status or "Unknown" }}</p>
+                    <p><strong>Genres:</strong> {{ anime.genre }}</p>
+
+                    {% if anime.synopsis %}
+                        <p class="synopsis">
+                            {{ anime.synopsis[:250] }}{% if anime.synopsis|length > 250 %}...{% endif %}
+                        </p>
+                    {% else %}
+                        <p class="synopsis">No synopsis available.</p>
+                    {% endif %}
+
+                    <button class="btn secondary-btn">
+                        Add to Library
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endif %}
 {% endblock %}
