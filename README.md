@@ -14,7 +14,7 @@ for mac: source venv/bin/activate
 
 windows: \venv\Scripts\activate
 
-py -m pip install -r requirements.txt 
+py -m pip install -r requirements.txt  (RUN INSIDE VENV)
 
 so that you have the proper libraries needed to run the web app locally with your own machine as the server
 
