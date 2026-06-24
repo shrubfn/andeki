@@ -10,6 +10,11 @@ py -m venv venv
 
 py -m pip install -r requirements.txt 
 
+for mac:
+source venv/bin/activate
+
+windows: \venv\Scripts\activate
+
 so that you have the proper libraries needed to run the web app locally with your own machine as the server
 
 open up python in the terminal and run:
@@ -20,7 +25,7 @@ import models
 
 with app.app_context():
 
-    db.create_all()
+db.create_all()
 
 to initialise database
 
