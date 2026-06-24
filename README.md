@@ -8,12 +8,13 @@ create python venv with
 
 py -m venv venv
 
-py -m pip install -r requirements.txt 
+activate venv:
 
-for mac:
-source venv/bin/activate
+for mac: source venv/bin/activate
 
 windows: \venv\Scripts\activate
+
+py -m pip install -r requirements.txt 
 
 so that you have the proper libraries needed to run the web app locally with your own machine as the server
 
