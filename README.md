@@ -1,5 +1,7 @@
 Documentation : https://docs.google.com/document/d/1up91iUYVqkVHMbK-yYIJlsctOlqg2p2JnImRjXyvUT4/edit?usp=sharing
 
+To run in CMD, go to cd (filepath)
+
 When installing to use, make sure to activate the python virtual env and run 
 
 create python venv with 
@@ -21,5 +23,7 @@ with app.app_context():
     db.create_all()
 
 to initialise database
+
+then run app.py
 
 Pseudocode can be found in pseudocodes.txt
